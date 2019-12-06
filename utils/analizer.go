@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"gorser/utils/errors"
+	"mathPargo/utils/errors"
 	"regexp"
 )
 

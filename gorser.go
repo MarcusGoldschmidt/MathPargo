@@ -1,7 +1,7 @@
-package gorser
+package mathPargo
 
 import (
-	"gorser/utils"
+	"mathPargo/utils"
 )
 
 // MathExpression represent a math expression to parser

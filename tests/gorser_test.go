@@ -1,8 +1,8 @@
 package tests
 
 import (
-	"gorser"
-	"gorser/utils/errors"
+	"mathPargo"
+	"mathPargo/utils/errors"
 	"testing"
 )
 
@@ -36,7 +36,7 @@ func TestShoutNotThrowErrorOnCreateCreate(t *testing.T) {
 	}
 
 	for _, el := range tests{
-		_, err := gorser.NewExpression(el.input)
+		_, err := mathPargo.NewExpression(el.input)
 		el.obtained = err
 		if !el.AssertErrorEquals() {
 			t.Error("Calculate nothing from nothing: ", err)
