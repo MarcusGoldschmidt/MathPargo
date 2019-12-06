@@ -34,7 +34,7 @@ func (b *Node) Calculate(x *float64) float64 {
 }
 
 // NewNode create a binary tree from a string
-func NewNode(expression *string) (*Node, error) {
+func NewNode(expression string) (*Node, error) {
 	errorChannel := make(chan error)
 	nodeChannel := make(chan *Node)
 
@@ -44,7 +44,7 @@ func NewNode(expression *string) (*Node, error) {
 		return nil, err
 	}
 
-	go newNodeRoutine(expression, errorChannel, nodeChannel)
+	go newNodeRoutine(&expression, errorChannel, nodeChannel)
 
 	return <-nodeChannel, <-errorChannel
 }
@@ -59,7 +59,7 @@ func newNodeRoutine(expression *string, errorChannel chan error, nodeChannel cha
 		nodeChannel <- nil
 	}
 
-	// Currente node symbols error
+	// Current node symbols error
 	// Stop all routines with errorChannel
 	result, err := SeparateSymbols(expression)
 	if err != nil {
@@ -76,23 +76,23 @@ func newNodeRoutine(expression *string, errorChannel chan error, nodeChannel cha
 		nodeChannelLeft := make(chan *Node)
 		nodeChannelRight := make(chan *Node)
 
-		go newNodeRoutine(result.leftOperator, errorChannel, nodeChannelLeft)
-		go newNodeRoutine(result.rightOperator, errorChannel, nodeChannelRight)
+		go newNodeRoutine(&result.leftOperator, errorChannel, nodeChannelLeft)
+		go newNodeRoutine(&result.rightOperator, errorChannel, nodeChannelRight)
 
-		node.value = *result.operation
+		node.value = result.operation
 
 		node.left, node.right = <-nodeChannelLeft, <-nodeChannelRight
 	case Value:
-		node.value = *result.leftOperator
+		node.value = result.leftOperator
 	case Variable:
 		// TODO: Make it work for any variable that que user inputs
 		node.value = VariableChar
 	case Function:
 		nodeChannelRight := make(chan *Node)
 
-		go newNodeRoutine(result.leftOperator, errorChannel, nodeChannelRight)
+		go newNodeRoutine(&result.leftOperator, errorChannel, nodeChannelRight)
 
-		node.value = *result.operation
+		node.value = result.operation
 		node.right = <-nodeChannelRight
 	}
 
