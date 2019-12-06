@@ -81,7 +81,7 @@ func TestShoutThrowErrors(t *testing.T) {
 		var err error
 		el.obtained, err = SeparateSymbols(&el.input)
 
-		if err != nil{
+		if err != nil {
 			t.Error("Error: ", err)
 		}
 

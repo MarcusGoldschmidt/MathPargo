@@ -14,6 +14,12 @@ const (
 	Function
 )
 
+var priorityOperators = []string{
+	"*",
+	"/",
+	"^",
+}
+
 // OperationType type of a operation can be, the result from a lexicon or a content of node
 type OperationType int8
 
@@ -129,22 +135,6 @@ func GetFunctionParams(value *string) string {
 	return (*value)[start:end]
 }
 
-func ValidateParentheses(value string) bool {
-	numberOf := 0
-	for _, el := range value {
-		if el == '(' {
-			numberOf++
-			continue
-		}
-
-		if el == ')' {
-			numberOf--
-			continue
-		}
-	}
-	return numberOf == 0
-}
-
 func fixPriorityOperatorSize(block []byte, value *string, regexBinaryExpression *regexp.Regexp) int {
 	// Identify Block with operator priority
 	fistBlockSize := len(string(block))
@@ -158,7 +148,7 @@ func fixPriorityOperatorSize(block []byte, value *string, regexBinaryExpression 
 	}
 
 	// No need to update the order
-	if fistBlockSize + secondBlockSize == len(*value){
+	if fistBlockSize+secondBlockSize == len(*value) {
 		return fistBlockSize
 	}
 

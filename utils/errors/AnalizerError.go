@@ -22,10 +22,3 @@ func GenerateNotValidExpression(value string) error {
 		Err: "Not a valid expression: " + value,
 	}
 }
-
-// GenerateInvalidSyntaxParenthesis when has no expresion valid or found
-func GenerateInvalidSyntaxParenthesis(value string) error {
-	return &AnalyzerError{
-		Err: "Parenthesis declaration failed: " + value,
-	}
-}
