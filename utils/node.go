@@ -38,6 +38,12 @@ func NewNode(expression *string) (*Node, error) {
 	errorChannel := make(chan error)
 	nodeChannel := make(chan *Node)
 
+	// Validate general string
+	err := ValidateGeneralExpression(expression)
+	if err != nil {
+		return nil, err
+	}
+
 	go newNodeRoutine(expression, errorChannel, nodeChannel)
 
 	return <-nodeChannel, <-errorChannel
@@ -53,7 +59,7 @@ func newNodeRoutine(expression *string, errorChannel chan error, nodeChannel cha
 		nodeChannel <- nil
 	}
 
-	// Currente node simbols error
+	// Currente node symbols error
 	// Stop all routines with errorChannel
 	result, err := SeparateSymbols(expression)
 	if err != nil {

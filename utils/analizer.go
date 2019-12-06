@@ -44,21 +44,38 @@ func IndentifyBlock(value *string) (int, OperationType, error) {
 
 	valueBytes := []byte(*value)
 
-	if block := regexValue.Find(valueBytes); block != nil{
+	if block := regexValue.Find(valueBytes); block != nil {
 		return len(block), Value, nil
 	}
 
-	if block := regexFunctions.Find(valueBytes); block != nil{
+	if block := regexFunctions.Find(valueBytes); block != nil {
 		return len(block), Function, nil
 	}
 
-	if block := regexParenthesesBlock.Find(valueBytes); block != nil{
+	if block := regexParenthesesBlock.Find(valueBytes); block != nil {
 		return len(block), BinaryExpression, nil
 	}
 
-	return nil, nil, errors.GenerateNotValidExpression(*value)
+	return 0, 0, errors.GenerateNotValidExpression(*value)
 }
 
-func getBlock(value *string)  {
+func ValidateGeneralExpression(value *string) error  {
+	if ValidateParentheses(value) {
+		return errors.GenerateInvalidSyntaxParenthesis(*value)
+	}
+	return nil
+}
 
+func ValidateParentheses(value *string) bool {
+	numberOf := 0
+	for _, el := range *value{
+		if el == '(' {
+			numberOf++
+		}
+
+		if el == ')'{
+			numberOf--
+		}
+	}
+	return numberOf == 0
 }
